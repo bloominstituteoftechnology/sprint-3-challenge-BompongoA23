@@ -58,7 +58,34 @@
       // 🧠 Implement a `getAllReversed` method which returns the ints in reverse order
       // ❗ WARNING: except for `getAllReversed`, methods must respect the order of the integers
       // ❗ WARNING: note that none of the methods actually mutate the `ints` property
-
+constructor(...arg){
+  this.ints=arg;
+}
+getAll(){
+  return this.ints;
+}
+getEvens(){
+return this.ints.filter(num=> num % 2 === 0);
+}
+getNegatives(){
+return this.ints.filter(num => num <0)
+}
+getAllSquared(){
+return this.ints.map(num => num ** 2);
+}
+pop(){
+return this.ints.pop();
+}
+push(int){
+this.ints.push(int);
+return this.ints;
+}
+getEveryNth(n){
+return this.ints.filter((_, index) => index % n === 0)
+}
+getAllReversed(){
+return this.ints.slice().reverse();
+}
     }
 
     // 👉 CHALLENGE 2 NerfGun
@@ -76,9 +103,33 @@
       //      * When engaging the safety, return "Safety enabled!"
       //      * When disengaging the safety, return "Safety disabled!"
       // 🌟 HINT: instances need to keep track of their maximum capacity as well as their current capacity
-
+constructor(capacity){
+this.capacity = capacity;
+this.currentCapacity= capacity;
+this.safetyOn = true;
+}
+shoot() {
+  if (this.currentCapacity > 0 && !this.safetyOn) {
+    this.currentCapacity--;
+    return "Bang!";
+  } else {
+    return "Click!";
+  }
     }
+    reload(number) {
 
+  if (typeof number !== 'number' || number <= 0) {
+    return "Error reloading!";
+  }
+
+  this.currentCapacity = Math.min(this.currentCapacity + number, this.capacity);
+  return `${this.currentCapacity} projectiles left!`;
+}
+toggleSafety() {
+    this.safetyOn = !this.safetyOn;
+    return this.safetyOn ? "Safety enabled!" : "Safety disabled!";
+  }
+}
     // 👉 CHALLENGE 3 EBook
     class EBook {
       // 🧠 Constructor takes two arguments:
@@ -95,7 +146,18 @@
       //    ebook.next() // returns null
       // 🌟 HINT: remember about the `slice` method which strings and arrays have
       // ❗ Feel free to implement `back`, although this is not required nor graded
-
+constructor(text, pageSize){
+this.text= text;
+this.pageSize=pageSize;
+this.currentPage=0;
+}
+next() {
+    const start = this.currentPage * this.pageSize;
+    const end = start + this.pageSize;
+    const page = this.text.slice(start, end);
+    this.currentPage++;
+    return page || null;
+  }
     }
 
     // 👉 CHALLENGE 4 AntFarm
@@ -130,7 +192,40 @@
       //      console.log(list) // prints ["a"]
       // 👉 HINT: if you are not feeling confident with map and filter, solve the problem with for loops,
       //      and with the piece of mind of all tests passing, refactor to use map/filter
+      constructor(...antNames) {
+    this.ants = antNames.map(name => ({ name, health: 100 }));
+  }
 
+  work() {
+  let startingAntCount = this.ants.length;
+
+  if (startingAntCount === 0) {
+    return "No ants here. Did you work them to death?";
+  }
+
+  this.ants.forEach(ant => {
+    ant.health -= 20;
+  });
+
+  this.ants = this.ants.filter(ant => ant.health > 0);
+
+  return `${startingAntCount} ants starting work!`;
+}
+
+  feed(name) {
+    const fedAnts = this.ants.filter(ant => ant.name === name);
+
+    if (fedAnts.length === 0) {
+      return `${name} not found!`;
+    }
+
+    fedAnts.forEach(ant => {
+      ant.health += 15;
+      if (ant.health > 115) ant.health = 115; 
+    });
+
+    return "Yum!";
+  }
     }
 
     // 🧪 TESTS, do not make any changes below this line ===================
